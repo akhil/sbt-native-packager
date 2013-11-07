@@ -31,7 +31,7 @@ object JavaAppBashScript {
        
   private def makeClasspathDefine(cp: Seq[String]): String = {
     val fullString = cp map (n => "$lib_dir/"+n) mkString ":"
-    "declare -r app_classpath=\""+fullString+"\"\n"
+    "declare app_classpath=\""+fullString+"\"\n"
   }  
   def generateScript(defines: Seq[String]): String = {
     val defineString = defines mkString "\n"
