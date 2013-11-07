@@ -2,7 +2,7 @@ sbtPlugin := true
 
 name := "sbt-native-packager"
 
-organization := "com.typesafe.sbt"
+organization := "com.gettyimages.sbt"
 
 scalacOptions in Compile += "-deprecation"
 
@@ -19,11 +19,23 @@ site.sphinxSupport()
 
 ghpages.settings
 
-git.remoteRepo := "git@github.com:sbt/sbt-native-packager.git"
+git.remoteRepo := "git@gitlab.amer.gettywan.com:digitalassetmanagement/sbt-native-packager.git"
 
-publishTo := Some(Resolver.url("sbt-plugin-releases", new URL("http://scalasbt.artifactoryonline.com/scalasbt/sbt-plugin-releases/"))(Resolver.ivyStylePatterns))
+credentials += Credentials("Sonatype Nexus Repository Manager",
+                          "sea-ops-artifacts-01.amer.gettywan.com",
+                          "deployment",
+                          "x69kg1zM8cd9")
 
-publishMavenStyle := false
+publishTo <<= version { (v: String) =>
+  val nexusBaseUrl = "http://sea-ops-artifacts-01.amer.gettywan.com:8081/nexus/content/repositories/"
+  if(v.trim.endsWith("SNAPSHOT")) {
+    Some("getty-snapshots-publish" at nexusBaseUrl + "/snapshots")
+  } else {
+    Some("getty-releases-publish" at nexusBaseUrl + "/releases")
+  }
+}
+
+publishMavenStyle := true
 
 scriptedSettings
 
